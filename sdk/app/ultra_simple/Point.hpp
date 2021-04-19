@@ -18,10 +18,17 @@ public:
     this->y = y;
   }
 
-  Point operator+(Point &p) { return Point(this->x + p.x, this->y + p.y); }
-  Point operator/(double d) { return Point(this->x / d, this->y / d); }
+  Point<T> &operator=(const Point<T> &p) {
+    x = p.x;
+    y = p.y;
+    return *this;
+  }
+  Point<T> operator+(Point<T> &p) {
+    return Point<T>(this->x + p.x, this->y + p.y);
+  }
+  Point<T> operator/(double d) { return Point<T>(this->x / d, this->y / d); }
 
-  static Point fromPolar(const PolarVector &p);
+  static Point<T> fromPolar(const PolarVector &p);
 
   std::string toString() {
     return std::string("x: ") + std::to_string(x) + ", " + std::string("y: ") +

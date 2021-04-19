@@ -39,8 +39,7 @@ public:
   }
 
   Circle &operator=(const Circle &c) {
-    center.x = c.center.x;
-    center.y = c.center.y;
+    center = c.center;
     r = c.r;
     s = c.s;
     i = c.i;
