@@ -1,62 +1,59 @@
-//
-//						 circle.h
-//
-/************************************************************************
-                        DECLARATION OF THE CLASS CIRCLE
-************************************************************************/
-// Class for Circle
-// A circle has 7 fields:
-//     a, b, r (of type double), the circle parameters
-//     s (of type double), the estimate of sigma (standard deviation)
-//     g (of type double), the norm of the gradient of the objective function
-//     i and j (of type int), the iteration counters (outer and inner,
-//     respectively)
+/**
+ * @file Circle.hpp
+ *
+ * This file defines Circle Class.
+ *
+ * Class member & explaination:
+ * - Point<double> center: it stores the center of Circle
+ * - double& a, &b: legacy purpose, it references to center.x and center.y
+ * - double r: radius of Circle
+ * - double s: the estimate of sigma (standard deviation)
+ * - double g: the norm of the gradient of the objective function
+ * - int i: number of used outer iteration for circle fitting
+ * - int k: number of used inner iteration for circle fitting
+ */
 #pragma once
+#include "Point.hpp"
 #include "helper_funcs.hpp"
 
 class Circle {
 public:
   // The fields of a Circle
-  double a, b, r, s, g, Gx, Gy;
+  double r, s, g, Gx, Gy;
+  double &a, &b;
+  Point<double> center;
   int i, j;
 
   // constructors
-  Circle();
-  Circle(double aa, double bb, double rr);
+  Circle() : center(), a(center.x), b(center.y) {
+    a = 0.;
+    b = 0.;
+    r = 1.;
+    s = 0.;
+    i = 0;
+    j = 0;
+  }
+  Circle(double cx, double cy, double radius)
+      : center(cx, cy), a(center.x), b(center.y) {
+    r = radius;
+  }
+
+  Circle &operator=(const Circle &c) {
+    center.x = c.center.x;
+    center.y = c.center.y;
+    r = c.r;
+    s = c.s;
+    i = c.i;
+    j = c.j;
+
+    return *this;
+  }
 
   // routines
-  void print(void);
-
-  // no destructor we didn't allocate memory by hand.
+  void print(void) {
+    cout << endl;
+    cout << setprecision(10) << "center (" << a << "," << b << ")  radius " << r
+         << "  sigma " << s << "  gradient " << g << "  iter " << i
+         << "  inner " << j << endl;
+  }
 };
-
-/************************************************************************
-                        BODY OF THE MEMBER ROUTINES
-************************************************************************/
-// Default constructor
-
-Circle::Circle() {
-  a = 0.;
-  b = 0.;
-  r = 1.;
-  s = 0.;
-  i = 0;
-  j = 0;
-}
-
-// Constructor with assignment of the circle parameters only
-
-Circle::Circle(double aa, double bb, double rr) {
-  a = aa;
-  b = bb;
-  r = rr;
-}
-
-// Printing routine
-
-void Circle::print(void) {
-  cout << endl;
-  cout << setprecision(10) << "center (" << a << "," << b << ")  radius " << r
-       << "  sigma " << s << "  gradient " << g << "  iter " << i << "  inner "
-       << j << endl;
-}

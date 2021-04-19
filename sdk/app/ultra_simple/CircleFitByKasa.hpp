@@ -1,9 +1,10 @@
 #include "Circle.hpp"
 #include "PointArray.hpp"
-#include "helper_funcs.hpp"
 #include "Statistics.hpp"
+#include "helper_funcs.hpp"
 
-Circle CircleFitByKasa(PointArray<double> &data)
+namespace CircleFittingModel {
+Circle kasaFitting(PointArray<double> &data)
 /*
       Circle fit to a given set of data points (in 2D)
 
@@ -105,3 +106,4 @@ Circle CircleFitByKasa(PointArray<double> &data)
 
   return circle;
 }
+} // namespace CircleFittingModel

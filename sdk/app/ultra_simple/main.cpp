@@ -216,8 +216,7 @@ int main(int argc, const char *argv[]) {
 
         // cout << "get a polar vector: " << v.toString() << endl;
 
-        Point<double> p = Point<double>::fromPolar(
-            PolarVector(r, dist));
+        Point<double> p = Point<double>::fromPolar(PolarVector(r, dist));
 
         // cout << "Converted to point: " << p.toString() << endl << endl;
         if (angle > 87 && angle < 93 && dist > 100) {
@@ -229,20 +228,19 @@ int main(int argc, const char *argv[]) {
         }
       }
 
-
       PointArray<double> flitered = arr;
 
-          // flitered = Fliter::removeInvalidData(flitered);
-    cout << "flitered length: " << flitered.size() << endl;
-          flitered.print();
+      // flitered = Fliter::removeInvalidData(flitered);
+      cout << "flitered length: " << flitered.size() << endl;
+      flitered.print();
 
       cout << "approximation by CircleFitByKasa:" << endl;
-      Circle c = CircleFitByKasa(flitered);
+      Circle c = CircleFittingModel::kasaFitting(flitered);
 
       c.print();
 
       cout << "approximation by CircleFitByLevenbergMarquardtFull:" << endl;
-      CircleFitByLevenbergMarquardtFull(flitered, c, 0.001, c);
+      CircleFittingModel::levenbergMarquardtFullFitting(flitered, c, 0.001, c);
 
       c.print();
     }
