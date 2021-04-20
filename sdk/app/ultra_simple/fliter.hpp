@@ -63,14 +63,14 @@ template <typename T>
 float firstDerivative(const PointArray<T> &arr, int index) {
   const int size = arr.size();
   const PolarVector pv = PolarVector::fromCartesian(arr[index]);
-  for (int i = index + 1; i < size; ++i) {
+  for (int i = index + 1; i < min(size, index + 5); ++i) {
     const PolarVector next = PolarVector::fromCartesian(arr[i]);
     if (next.mag != 0) {
       return (pv.mag - next.mag) / (pv.rad - next.rad);
     }
   }
 
-  for (int i = index - 1; i >= 0; --i) {
+  for (int i = index - 1; i >= max(0, index - 5); --i) {
     const PolarVector prev = PolarVector::fromCartesian(arr[i]);
     if (prev.mag != 0) {
       return (pv.mag - prev.mag) / (pv.rad - prev.rad);
