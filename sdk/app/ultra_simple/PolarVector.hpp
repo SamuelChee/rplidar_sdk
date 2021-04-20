@@ -19,7 +19,12 @@ public:
   }
 
   static PolarVector fromCartesian(const Point<double> &p) {
-    return PolarVector(sqrt(p.x * p.x + p.y * p.y), atan(p.y / p.x));
+    float rad = atan(p.y / p.x);
+    if (rad < 0) {
+      rad = 2 * 3.1415 - rad; // wrap angle
+    }
+
+    return PolarVector(sqrt(p.x * p.x + p.y * p.y), rad);
   }
 
   void toCartesian(double &x, double &y) {
@@ -28,7 +33,9 @@ public:
   }
 
   std::string toString() {
-    return std::string("angle: ") + std::to_string(rad / (2 * 3.1415926) * 360) + std::string(", mag: ") + std::to_string(mag);
+    return std::string("angle: ") +
+           std::to_string(rad / (2 * 3.1415926) * 360) +
+           std::string(", mag: ") + std::to_string(mag);
   }
 };
 
