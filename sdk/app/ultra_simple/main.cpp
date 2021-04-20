@@ -25,6 +25,7 @@
  */
 
 #include <cmath>
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -44,6 +45,8 @@
 #define delay(x) ::Sleep(x)
 #else
 #include <unistd.h>
+using namespace std;
+
 static inline void delay(_word_size_t ms) {
   while (ms >= 1000) {
     usleep(1000 * 1000);
@@ -192,6 +195,7 @@ int main(int argc, const char *argv[]) {
   drv->startScan(0, 1);
 
   // fetech result and print it out...
+  cout << "angle,distance" << endl;
   while (1) {
 #define PI (3.1415926)
     rplidar_response_measurement_node_hq_t nodes[8192];
@@ -210,8 +214,6 @@ int main(int argc, const char *argv[]) {
 
         double r = angle / 360 * 2 * PI;
 
-        // printf("angle: %f, rad: %f, dist: %f ", angle, r, dist);
-
         PolarVector v = PolarVector(r, dist);
 
         // cout << "get a polar vector: " << v.toString() << endl;
@@ -219,7 +221,8 @@ int main(int argc, const char *argv[]) {
         Point<double> p = Point<double>::fromPolar(PolarVector(r, dist));
 
         // cout << "Converted to point: " << p.toString() << endl << endl;
-        if (angle > 87 && angle < 93 && dist > 100) {
+        if (angle > 70 && angle < 150) {
+          printf("%f,%f\n", angle, dist);
           arr.push_back(p);
         }
 
@@ -228,7 +231,19 @@ int main(int argc, const char *argv[]) {
         }
       }
 
+      vector<int> minIndex = Fliter::localMinimum(arr, 0.01);
       PointArray<double> flitered = arr;
+
+      cout << "flitered data:" << endl;
+      cout << "angle,distance" << endl;
+
+      for (int i : minIndex) {
+        PolarVector pv = PolarVector::fromCartesian(arr[i]);
+        printf("%d: %f,%f\n", i, pv.rad * 2 / 360 * PI, pv.mag);
+      }
+
+      break;
+      // break;
 
       // flitered = Fliter::removeInvalidData(flitered);
       cout << "flitered length: " << flitered.size() << endl;

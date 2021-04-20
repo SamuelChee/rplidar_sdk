@@ -97,30 +97,44 @@ vector<int> localMinimum(const PointArray<T> &arr, const double searchingRad) {
 
     const double curRad = pv.rad;
 
-    int r = i - 1;
+    int r = i;
     do {
+      r--;
       float d = firstDerivative(arr, r);
-      if (!d)
+      if (!d || isinf(d) || isnan(d))
         continue;
       dwSlope += d;
       ++numDW;
+      // cout << "searching dw: " << d << endl;
     } while (r >= 0 &&
              PolarVector::fromCartesian(arr[r]).rad >= curRad - searchingRad);
 
-    int k = i + 1;
+    cout << "average slope(dw): " << dwSlope << ", " << numDW << ", "
+         << (dwSlope / numDW) << endl;
+
+    int k = i;
 
     do {
+      k++;
       float d = firstDerivative(arr, k);
-      if (!d)
+      if (!d || isinf(d) || isnan(d))
         continue;
-      dwSlope += d;
-      ++numDW;
+      uwSlope += d;
+      ++numUW;
+      // cout << "searching uw: " << d << endl;
+
     } while (k < arr.size() &&
              PolarVector::fromCartesian(arr[k]).rad <= curRad + searchingRad);
 
+    cout << "average slope(uw): " << uwSlope << ", " << numUW << ", "
+         << (uwSlope / numUW) << endl;
+
     if (dwSlope / numDW < 0 && uwSlope / numUW > 0) {
+      // cout << "push a min index" << endl;
       min.push_back(i);
       i += k;
+    } else {
+      // cout << "fk" << endl;
     }
   }
 
